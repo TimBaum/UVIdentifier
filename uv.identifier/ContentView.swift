@@ -30,7 +30,6 @@ struct ContentView: View {
                 .fill(Color("LightBackground")))
                 .padding(.top, 5)
                 
-                Spacer()
                 
                 HStack {
                     QuadraticView(title: "Time to burn", content: "15m")
@@ -42,11 +41,11 @@ struct ContentView: View {
                             .font(.title2)
                             .fontWeight(.bold)
                             .foregroundColor(Color.white)
-                        Text("• Stay inside")
+                        Text("• Wear sunglasses")
                             .font(.title2)
                             .fontWeight(.bold)
                             .foregroundColor(Color.white)
-                        Text("• Stay inside")
+                        Text("• Use suncream")
                             .font(.title2)
                             .fontWeight(.bold)
                             .foregroundColor(Color.white)
@@ -59,10 +58,6 @@ struct ContentView: View {
                 )
                 .fill(Color("DarkBackground")))
                 .padding()
-                
-                Spacer()
-                
-                Divider()
                 
                 Spacer()
             }
@@ -89,9 +84,13 @@ struct QuadraticView: View {
                     .fontWeight(.bold)
                     .foregroundColor(.white)
                 Spacer()
+                Button {
+                    print("Edit button was tapped")
+                } label: {
                 Image(systemName: "info.circle")
                     .foregroundColor(.white)
                     .font(.title2)
+                }
             }
             Spacer()
             HStack {
@@ -103,12 +102,13 @@ struct QuadraticView: View {
             }
         }
         .padding()
-        .frame(minWidth: 150, idealWidth: 150, maxWidth: 150, minHeight: 150, idealHeight: 150, maxHeight: 150)
+        .frame(width: 150, height: 150)
         .background(
             RoundedRectangle(
                 cornerRadius: 10
             )
             .fill(Color("DarkBackground"))
+            .aspectRatio(1.0, contentMode: .fit)
         )
         .padding()
     }
