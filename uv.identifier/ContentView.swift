@@ -18,10 +18,10 @@ struct ContentView: View {
 
             VStack {
                 VStack {
-                    Text((locationManager.city ?? "City") + ",")
+                    Text((locationManager.city ?? "-") + ",")
                         .font(.title)
                         .fontWeight(.bold)
-                    Text(locationManager.country ?? "country")
+                    Text(locationManager.country ?? "-")
                         .font(.title)
                         .fontWeight(.bold)
                 }
@@ -31,9 +31,6 @@ struct ContentView: View {
                 )
                 .fill(Color("LightBackground")))
                 .padding(.top, 5)
-                .onAppear {
-                    locationManager.checkIfLocationServicesIsEnabled()
-                }
                 
                 
                 HStack {
@@ -46,6 +43,9 @@ struct ContentView: View {
                 
                 Spacer()
             }
+        }
+        .onAppear {
+            locationManager.checkIfLocationServicesIsEnabled()
         }
     }
 }
