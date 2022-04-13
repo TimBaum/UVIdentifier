@@ -10,6 +10,24 @@ import SwiftUI
 struct ContentView: View {
     
     @StateObject var locationManager = LocationManager()
+    @ObservedObject var uvManager = UVManager()
+    let languageManager = LanguageManagager()
+    
+    @State var currentLanguage = "🇺🇸"
+    @State var currentSkinType = "👋🏻 - Skin Type 1"
+    {
+        didSet {
+            print(2)
+            uvManager.setSkinType(newSkinType: skinTypes.firstIndex(of: currentSkinType)! + 1)
+        }
+    }
+    @State var currentNotification = "always"
+
+    
+    @State var currentTime: Float = 18.0
+    
+    let skinTypes = ["👋🏻 - Skin Type 1", "👋🏻 - Skin Type 2", "👋🏼 - Skin Type 3", "👋🏽 - Skin Type 4", "👋🏾 - Skin Type 5", "👋🏿 - Skin Type 6"]
+    let notifications = ["always"]
     
     var body: some View {
         ZStack {
@@ -18,7 +36,7 @@ struct ContentView: View {
 
             VStack {
                 VStack {
-                    Text((locationManager.city ?? "-") + ",")
+                    Text("📍 " + (locationManager.city ?? "-") + "," + currentSkinType)
                         .font(.title)
                         .fontWeight(.bold)
                     Text(locationManager.country ?? "-")
@@ -30,22 +48,41 @@ struct ContentView: View {
                     cornerRadius: 10
                 )
                 .fill(Color("LightBackground")))
-                .padding(.top, 5)
+                .padding(.top)
+
                 
+                DividerWhite()
                 
                 HStack {
-                    QuadraticView(title: "Time to burn", content: "15m")
-                    QuadraticView(title: "UV-Index", content: "7")
+                    QuadraticTileView(title: "Time until sunburn", content: uvManager.getTimeToBurnOfTime(time: Int(currentTime)), color: uvManager.getColorCode(currentTime: currentTime))
+                    QuadraticTileView(title: "UV-Index", content: NSString(format: "%.0f", uvManager.getUVIndexOfTime(time: Int(currentTime))) as String, color: uvManager.getColorCode(currentTime: currentTime))
                 }
-                //Text section
-                BulletPointView()
-                SliderView()
                 
+                BulletPointView()
+                SliderView(uvManager: uvManager, currentTime: $currentTime)
+                
+                Text(String(currentTime))
+                
+                DividerWhite()
+                
+                HStack {
+                    settingsTile(icon: "🇺🇸", options: languageManager.languages, selection: $currentLanguage)
+                    Spacer()
+                    settingsTile(icon: "👋", options: skinTypes, selection: $currentSkinType)
+                    Spacer()
+                    settingsTile(icon: "🛎", options: notifications, selection: $currentNotification)
+                }
+                .padding(.leading)
+                .padding(.trailing)
                 Spacer()
             }
         }
         .onAppear {
             locationManager.checkIfLocationServicesIsEnabled()
+            let date = Date()
+            let calendar = Calendar.current
+            
+            currentTime = Float(calendar.component(.hour, from: date))
         }
     }
 }
@@ -56,199 +93,36 @@ struct ContentView_Previews: PreviewProvider {
     }
 }
 
-struct QuadraticView: View {
-    
-    let title: String
-    let content: String
-    
+struct DividerWhite: View {
     var body: some View {
-        VStack {
-            HStack(alignment: .top) {
-                Text(title)
-                    .font(.title2)
-                    .fontWeight(.bold)
-                    .foregroundColor(.white)
-                Spacer()
-                Button {
-                    print("Edit button was tapped")
-                } label: {
-                Image(systemName: "info.circle")
-                    .foregroundColor(.white)
-                    .font(.title2)
-                }
-            }
-            Spacer()
-            HStack {
-                Spacer()
-                Text(content)
-                    .font(.largeTitle)
-                    .fontWeight(.bold)
-                    .foregroundColor(.white)
-            }
-        }
-        .padding()
-        .frame(width: 160, height: 160)
-        .background(
-            RoundedRectangle(
-                cornerRadius: 10
-            )
-            .fill(Color("DarkBackground"))
-            .aspectRatio(1.0, contentMode: .fit)
-        )
+        Divider()
+        .opacity(0)
+        .frame(height: 1.0)
+        .background(Color("LightBackground"))
         .padding()
     }
 }
 
-struct BulletPointView: View {
-    var body: some View {
-        HStack(alignment: .top){
-            VStack(alignment: .leading) {
-                Text("• Stay inside")
-                    .font(.title2)
-                    .fontWeight(.bold)
-                    .foregroundColor(Color.white)
-                Text("• Wear sunglasses")
-                    .font(.title2)
-                    .fontWeight(.bold)
-                    .foregroundColor(Color.white)
-                Text("• Use suncream")
-                    .font(.title2)
-                    .fontWeight(.bold)
-                    .foregroundColor(Color.white)
-            }
-            Spacer()
-            Button {
-                print("Button")
-            } label: {
-                Image(systemName: "info.circle")
-                    .foregroundColor(.white)
-                    .font(.title2)
-            }
-        }
-        .padding()
-        .background(RoundedRectangle(
-            cornerRadius: 10
-        )
-        .fill(Color("DarkBackground")))
-        .padding()
-    }
-}
-
-struct SliderView: View {
+struct settingsTile: View {
+    let icon: String
+    let options: [String]
     
-    @State private var speed = 50.0
-    @State private var isEditing = false
-    
-    private let barHeight = 28.0
-
+    @Binding var selection: String
     
     var body: some View {
-        
+    
         VStack{
-            HStack(alignment: .top){
-                Text("Time:")
-                    .font(.title2)
-                    .fontWeight(.bold)
-                    .foregroundColor(Color.white)
-                Spacer()
-                Button {
-                    print("Button")
-                } label: {
-                    Image(systemName: "info.circle")
-                        .foregroundColor(.white)
-                        .font(.title2)
+            Picker(icon, selection: $selection){
+                ForEach(options, id: \.self) {
+                    Text($0)
                 }
             }
-            
-            ZStack{
-                RoundedRectangle(cornerRadius: 18)
-                    .frame(height: barHeight)
-                    .foregroundColor(.green)
-                //Dividers
-                HStack{
-                    Divider()
-                        .padding(.leading, 75)
-                        .frame(height: barHeight)
-                    Spacer()
-                    Divider()
-                        .frame(height: barHeight)
-                    Spacer()
-                    Divider()
-                        .frame(height: barHeight)
-                    Spacer()
-                    Divider()
-                        .padding(.trailing, 75)
-                        .frame(height: barHeight)
-                }
-                /**
-                 Circle()
-                     .stroke(Color.white, lineWidth: 3)
-                     .frame(height:29)
-                     .foregroundColor(.white)
-                     .shadow(radius: 3)
-                 */
-                
-                UISliderView(value: 24)
-                
-            }
-            
-            HStack(alignment: .top, spacing: 45){
-                Text("0")
-                    .font(.body)
-                    .fontWeight(.bold)
-                    .foregroundColor(Color.white)
-                    
-                
-                Text("6")
-                    .font(.body)
-                    .fontWeight(.bold)
-                    .foregroundColor(Color.white)
-                Text("12")
-                    .font(.body)
-                    .fontWeight(.bold)
-                    .foregroundColor(Color.white)
-                
-                Text("18")
-                    .font(.body)
-                    .fontWeight(.bold)
-                    .foregroundColor(Color.white)
-                Text("24")
-                    .font(.body)
-                    .fontWeight(.bold)
-                    .foregroundColor(Color.white)
-            }
+            .pickerStyle(.menu)
+            .padding()
+            .background(RoundedRectangle(
+                cornerRadius: 10
+                )
+            .fill(Color("LightBackground")))
         }
-        .padding()
-        .background(RoundedRectangle(
-            cornerRadius: 10
-        )
-        .fill(Color("DarkBackground")))
-        .padding()
-        
-    }
-}
-
-struct UISliderView: UIViewRepresentable {
-    @State var value: Float
-
-    var thumbColor: UIColor = .white
-
-    func makeUIView(context: Context) -> UISlider {
-        let slider = UISlider(frame: .zero)
-        
-        let slider_image = UIImage(named: "Opacity Slider")
-        
-        slider.setThumbImage(slider_image, for: UIControl.State
-            .normal)
-        slider.minimumTrackTintColor = UIColor(white: 1, alpha: 0)
-        slider.maximumTrackTintColor = UIColor(white: 1, alpha: 0)
-        slider.minimumValue = 0
-        slider.maximumValue = 24
-        
-        return slider
-    }
-
-    func updateUIView(_ uiView: UISlider, context: Context) {
-        uiView.value = value
     }
 }

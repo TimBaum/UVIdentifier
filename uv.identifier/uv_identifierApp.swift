@@ -9,6 +9,7 @@ import SwiftUI
 
 @main
 struct uv_identifierApp: App {
+    
     var body: some Scene {
         WindowGroup {
             ContentView()

@@ -38,8 +38,12 @@ final class LocationManager: NSObject, ObservableObject, CLLocationManagerDelega
         case .denied:
             print("Location is denied")
         case .authorizedAlways, .authorizedWhenInUse:
-            region = MKCoordinateRegion(center: locationManager.location!.coordinate, span: MKCoordinateSpan(latitudeDelta: 0.05, longitudeDelta: 0.05))
+            if let location = locationManager.location {
+            region = MKCoordinateRegion(center: location.coordinate, span: MKCoordinateSpan(latitudeDelta: 0.05, longitudeDelta: 0.05))
             updateCityAndCountry()
+            } else {
+                print("Location nil")
+            }
         @unknown default:
             break
         }

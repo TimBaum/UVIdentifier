@@ -21,10 +21,12 @@ class SkinType {
     func getBurnTimeAsString(uvIndex: Float) -> String {
         let minutes = getBurnTimeInMinutes(uvIndex: uvIndex)
         if minutes > 60 {
-            return String(minutes / 60) + "h"
+            var hours = minutes/60
+            hours.round(.down)
+            return NSString(format: "%.0f", hours) as String + "h"
         }
         else {
-            return String(minutes) + "m"
+            return NSString(format: "%.0f", minutes) as String + "m"
         }
     }
     
@@ -45,6 +47,6 @@ class SkinType {
         default:
             return 1
         }
-    
     }
+    
 }
