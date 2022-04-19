@@ -10,33 +10,34 @@ import SwiftUI
 struct ContentView: View {
     
     @StateObject var locationManager = LocationManager()
-    @ObservedObject var uvManager = UVManager()
+    @ObservedObject var uvManager = UVManager(skinType: 1, cityname: "Granada")
     let languageManager = LanguageManagager()
     
-    @State var currentLanguage = "🇺🇸"
-    @State var currentSkinType = "👋🏻 - Skin Type 1"
-    {
-        didSet {
-            print(2)
-            uvManager.setSkinType(newSkinType: skinTypes.firstIndex(of: currentSkinType)! + 1)
-        }
-    }
-    @State var currentNotification = "always"
-
+    //@State var currentLanguage = "🇺🇸"
+    @AppStorage("currentSkinType") var currentSkinType = "👋🏻 - Skin Type 1"
+    @AppStorage("currentNotification") var currentNotification = "🛎 - Off"
     
-    @State var currentTime: Float = 18.0
+    let notificationManager = NotificationManager(activatedNotification: 0)
+    
+    @State var currentTime: Float
     
     let skinTypes = ["👋🏻 - Skin Type 1", "👋🏻 - Skin Type 2", "👋🏼 - Skin Type 3", "👋🏽 - Skin Type 4", "👋🏾 - Skin Type 5", "👋🏿 - Skin Type 6"]
-    let notifications = ["always"]
+    
+    init() {
+        let date = Date()
+        let calendar = Calendar.current
+        currentTime = Float(calendar.component(.hour, from: date))
+        uvManager.setSkinType(newSkinType: skinTypes.firstIndex(of: UserDefaults.standard.string(forKey: "currentSkinType") ?? "👋🏻 - Skin Type 1")! + 1)
+    }
     
     var body: some View {
         ZStack {
-            LinearGradient(gradient: Gradient(colors: [Color("Blue1"), Color("Blue2")]), startPoint: .top, endPoint: .bottom)
+            LinearGradient(gradient: Gradient(colors: [Color("Blue2"), Color("Blue1")]), startPoint: .topLeading, endPoint: .bottomTrailing)
                 .ignoresSafeArea()
 
             VStack {
                 VStack {
-                    Text("📍 " + (locationManager.city ?? "-") + "," + currentSkinType)
+                    Text("📍 " + (locationManager.city ?? "-") + ",")
                         .font(.title)
                         .fontWeight(.bold)
                     Text(locationManager.country ?? "-")
@@ -47,42 +48,50 @@ struct ContentView: View {
                 .background(RoundedRectangle(
                     cornerRadius: 10
                 )
-                .fill(Color("LightBackground")))
+                .fill(Color("LightBackground"))
+                .shadow(radius: 5))
                 .padding(.top)
 
-                
                 DividerWhite()
                 
                 HStack {
-                    QuadraticTileView(title: "Time until sunburn", content: uvManager.getTimeToBurnOfTime(time: Int(currentTime)), color: uvManager.getColorCode(currentTime: currentTime))
+                    QuadraticTileView(title: "Time to sunburn", content: uvManager.getTimeToBurnOfTime(time: Int(currentTime)), color: uvManager.getColorCode(currentTime: currentTime))
+
                     QuadraticTileView(title: "UV-Index", content: NSString(format: "%.0f", uvManager.getUVIndexOfTime(time: Int(currentTime))) as String, color: uvManager.getColorCode(currentTime: currentTime))
                 }
                 
-                BulletPointView()
+                BulletPointView(currentTime: currentTime, burnMinutes: uvManager.getBurnTimeInMinutes(currentTime: currentTime))
                 SliderView(uvManager: uvManager, currentTime: $currentTime)
-                
-                Text(String(currentTime))
-                
+                                
                 DividerWhite()
                 
+                Spacer()
+                
                 HStack {
-                    settingsTile(icon: "🇺🇸", options: languageManager.languages, selection: $currentLanguage)
-                    Spacer()
+//                    settingsTile(icon: "🇺🇸", options: languageManager.languages, selection: $currentLanguage)
+//                    Spacer()
                     settingsTile(icon: "👋", options: skinTypes, selection: $currentSkinType)
-                    Spacer()
-                    settingsTile(icon: "🛎", options: notifications, selection: $currentNotification)
+                    settingsTile(icon: "🛎", options: notificationManager.notificationDescriptions, selection: $currentNotification)
                 }
                 .padding(.leading)
                 .padding(.trailing)
-                Spacer()
             }
         }
         .onAppear {
+            //Check for location services
             locationManager.checkIfLocationServicesIsEnabled()
-            let date = Date()
-            let calendar = Calendar.current
-            
-            currentTime = Float(calendar.component(.hour, from: date))
+        }
+        .onChange(of: currentSkinType) { value in
+            uvManager.setSkinType(newSkinType: skinTypes.firstIndex(of: value)! + 1)
+        }
+        .onChange(of: locationManager.city) { value in
+            uvManager.setLocation(cityname: value!)
+        }
+        .onChange(of: currentNotification) { value in
+            notificationManager.enableNotifications(newNotification: notificationManager.notificationDescriptions.firstIndex(of: value)!, uvManager: uvManager)
+        }
+        .onChange(of: uvManager.uv_times) {_ in
+            notificationManager.enableNotifications(newNotification: notificationManager.notificationDescriptions.firstIndex(of: currentNotification)!, uvManager: uvManager)
         }
     }
 }
@@ -122,7 +131,9 @@ struct settingsTile: View {
             .background(RoundedRectangle(
                 cornerRadius: 10
                 )
-            .fill(Color("LightBackground")))
+            .fill(Color("LightBackground"))
+            .shadow(radius: 5)
+)
         }
     }
 }

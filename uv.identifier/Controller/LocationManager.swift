@@ -31,19 +31,19 @@ final class LocationManager: NSObject, ObservableObject, CLLocationManagerDelega
         
         switch locationManager.authorizationStatus {
             
-        case .notDetermined:
-            locationManager.requestAlwaysAuthorization()
-        case .restricted:
-            print("Location is restricted")
-        case .denied:
-            print("Location is denied")
-        case .authorizedAlways, .authorizedWhenInUse:
-            if let location = locationManager.location {
-            region = MKCoordinateRegion(center: location.coordinate, span: MKCoordinateSpan(latitudeDelta: 0.05, longitudeDelta: 0.05))
-            updateCityAndCountry()
-            } else {
-                print("Location nil")
-            }
+            case .notDetermined:
+                locationManager.requestAlwaysAuthorization()
+            case .restricted:
+                print("Location is restricted")
+            case .denied:
+                print("Location is denied")
+            case .authorizedAlways, .authorizedWhenInUse:
+                if let location = locationManager.location {
+                region = MKCoordinateRegion(center: location.coordinate, span: MKCoordinateSpan(latitudeDelta: 0.05, longitudeDelta: 0.05))
+                updateCityAndCountry()
+                } else {
+                    print("Location nil")
+                }
         @unknown default:
             break
         }

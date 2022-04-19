@@ -7,29 +7,42 @@
 
 import Foundation
 
+/**
+ This class represents the skintype of a person. It is based on Fitzgerald.
+ */
 class SkinType {
+    //Can range from 16
     var skinTypeNumber: Int
     
     init(skinType: Int) {
+        precondition(skinType >= 1 && skinType <= 6, "Skin Type doesn't exist")
         self.skinTypeNumber = skinType
     }
     
+    /**
+    Return the time to get a sunburn
+     */
     func getBurnTimeInMinutes(uvIndex: Float) -> Float {
         return getMultiplier() * 200.0 / (3.0 * uvIndex)
     }
     
+    /**
+    Returns the time to burn in a readable string
+     */
     func getBurnTimeAsString(uvIndex: Float) -> String {
         let minutes = getBurnTimeInMinutes(uvIndex: uvIndex)
         if minutes > 60 {
-            var hours = minutes/60
-            hours.round(.down)
-            return NSString(format: "%.0f", hours) as String + "h"
+            let hours = minutes/60
+            return NSString(format: "%.1f", hours) as String + "h"
         }
         else {
             return NSString(format: "%.0f", minutes) as String + "m"
         }
     }
     
+    /**
+     Return the multiplier for each skintype
+     */
     private func getMultiplier() -> Float{
         switch skinTypeNumber {
         case 1:
@@ -48,5 +61,4 @@ class SkinType {
             return 1
         }
     }
-    
 }

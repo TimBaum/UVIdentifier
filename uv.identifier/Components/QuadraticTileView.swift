@@ -33,9 +33,10 @@ struct QuadraticTileView: View {
             HStack {
                 Spacer()
                 Text(content)
-                    .font(.largeTitle)
+                    .font(.system(size: 48))
                     .fontWeight(.bold)
                     .foregroundColor(color)
+                    .shadow(radius: 5)
             }
         }
         .padding()
@@ -46,6 +47,7 @@ struct QuadraticTileView: View {
             )
             .fill(Color("DarkBackground"))
             .aspectRatio(1.0, contentMode: .fit)
+            .shadow(radius: 5)
         )
         .padding()
     }

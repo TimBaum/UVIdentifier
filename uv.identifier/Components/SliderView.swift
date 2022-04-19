@@ -15,7 +15,7 @@ struct SliderView: View {
     @State private var isEditing = false
     
     @Binding var currentTime: Float
-        
+    
     private let barHeight = 28.0
     
     var body: some View {
@@ -40,53 +40,42 @@ struct SliderView: View {
                 RoundedRectangle(cornerRadius: 18)
                     .fill(LinearGradient(gradient: Gradient(colors: uvManager.getColorCodes()), startPoint: .leading, endPoint: .trailing))
                     .frame(height: barHeight)
+                    .shadow(radius: 5)
                 //Dividers
                 HStack{
                     Divider()
-                        .padding(.leading, 75)
-                        .frame(height: barHeight)
+                        .opacity(0)
                     Spacer()
                     Divider()
-                        .frame(height: barHeight)
                     Spacer()
                     Divider()
-                        .frame(height: barHeight)
                     Spacer()
                     Divider()
-                        .padding(.trailing, 75)
-                        .frame(height: barHeight)
+                    Spacer()
+                    Divider()
+                        .opacity(0)
                 }
-                /**
-                 Circle()
-                     .stroke(Color.white, lineWidth: 3)
-                     .frame(height:29)
-                     .foregroundColor(.white)
-                     .shadow(radius: 3)
-                 */
+                .frame(height: barHeight)
                 
                 UISliderView(value: $currentTime)
             }
             
-            HStack(alignment: .top, spacing: 45){
-                Text("0")
+            HStack {
+                Text("00")
                     .font(.body)
                     .fontWeight(.bold)
                     .foregroundColor(Color.white)
-                    
                 
-                Text("6")
-                    .font(.body)
-                    .fontWeight(.bold)
-                    .foregroundColor(Color.white)
+                Spacer()
+                    .foregroundColor(.white)
+                
                 Text("12")
                     .font(.body)
                     .fontWeight(.bold)
                     .foregroundColor(Color.white)
                 
-                Text("18")
-                    .font(.body)
-                    .fontWeight(.bold)
-                    .foregroundColor(Color.white)
+                Spacer()
+
                 Text("24")
                     .font(.body)
                     .fontWeight(.bold)
@@ -97,7 +86,8 @@ struct SliderView: View {
         .background(RoundedRectangle(
             cornerRadius: 10
         )
-        .fill(Color("DarkBackground")))
+            .fill(Color("DarkBackground"))
+            .shadow(radius: 5))
         .padding()
         
     }
@@ -105,9 +95,9 @@ struct SliderView: View {
 struct UISliderView: UIViewRepresentable {
     
     @Binding var value: Float
-
+    
     var thumbColor: UIColor = .white
-
+    
     func makeUIView(context: Context) -> UISlider {
         let slider = UISlider(frame: .zero)
         
@@ -119,11 +109,17 @@ struct UISliderView: UIViewRepresentable {
         slider.maximumTrackTintColor = UIColor(white: 1, alpha: 0)
         slider.minimumValue = 0
         slider.maximumValue = 23
-                
+        
         return slider
     }
-
+    
     func updateUIView(_ uiView: UISlider, context: Context) {
         uiView.value = value
+    }
+}
+
+struct SliderViewPreview: PreviewProvider {
+    static var previews: some View {
+        SliderView(uvManager: UVManager(skinType: 2, cityname: "Granada"), currentTime: .constant(10.0))
     }
 }
