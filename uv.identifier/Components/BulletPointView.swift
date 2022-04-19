@@ -7,6 +7,9 @@
 
 import SwiftUI
 
+/**
+ View that represents bullet points with helpful information
+ */
 struct BulletPointView: View {
     
     var currentTime: Float
@@ -44,6 +47,9 @@ struct BulletPointView: View {
         .padding()
     }
     
+    /**
+     Select information to display based on time until sunburn
+     */
     func selectUVString() -> [String] {
         let minutes = burnMinutes
         if minutes < 60 {

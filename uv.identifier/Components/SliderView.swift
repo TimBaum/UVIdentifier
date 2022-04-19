@@ -7,6 +7,9 @@
 
 import SwiftUI
 
+/**
+ Represents the slider. Slider does only display the UV intensity over the day and doesnt actually implement any functionality
+ */
 struct SliderView: View {
     
     @ObservedObject var uvManager: UVManager
@@ -38,7 +41,7 @@ struct SliderView: View {
             
             ZStack{
                 RoundedRectangle(cornerRadius: 18)
-                    .fill(LinearGradient(gradient: Gradient(colors: uvManager.getColorCodes()), startPoint: .leading, endPoint: .trailing))
+                    .fill(LinearGradient(gradient: Gradient(colors: uvManager.getAllColorCodes()), startPoint: .leading, endPoint: .trailing))
                     .frame(height: barHeight)
                     .shadow(radius: 5)
                 //Dividers
@@ -92,6 +95,10 @@ struct SliderView: View {
         
     }
 }
+
+/**
+ Customisable slider 
+ */
 struct UISliderView: UIViewRepresentable {
     
     @Binding var value: Float
@@ -120,6 +127,6 @@ struct UISliderView: UIViewRepresentable {
 
 struct SliderViewPreview: PreviewProvider {
     static var previews: some View {
-        SliderView(uvManager: UVManager(skinType: 2, cityname: "Granada"), currentTime: .constant(10.0))
+        SliderView(uvManager: UVManager(skinType: 2), currentTime: .constant(10.0))
     }
 }

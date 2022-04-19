@@ -9,6 +9,10 @@ import Foundation
 import SwiftUI
 import UIKit
 
+/**
+ This class manages the information about the uv index and the time that it takes to burn.
+ It publishes it changes and can be observed. It also holds the color codes.
+ */
 class UVManager: ObservableObject {
     
     var skinType: SkinType
@@ -16,20 +20,26 @@ class UVManager: ObservableObject {
     @Published var colorCodes: [Color] = []
     @Published var uv_times: [HourWeather] = [] {
         didSet {
-            self.colorCodes = getColorCodes()
+            self.colorCodes = getAllColorCodes()
         }
     }
     
-    init(skinType: Int, cityname: String) {
+    init(skinType: Int) {
         self.skinType = SkinType(skinType: skinType)
         self.getWeatherInfo()
     }
     
+    /**
+    Set the skintype
+     */
     func setSkinType(newSkinType: Int) -> Void {
         self.skinType = SkinType(skinType: newSkinType)
-        self.colorCodes = getColorCodes()
+        self.colorCodes = getAllColorCodes()
     }
     
+    /**
+     Return the uv index of a certain time or 0 if its empty
+     */
     func getUVIndexOfTime(time: Int) -> Float {
         if self.uv_times != [] {
             return self.uv_times[time].uv
@@ -39,29 +49,24 @@ class UVManager: ObservableObject {
         }
     }
     
+    /**
+    Calculate the time it takes to get a sunburn by calling the function in skinType with a specific time as String
+     */
     func getTimeToBurnOfTime(time: Int) -> String {
         return skinType.getBurnTimeAsString(uvIndex: self.getUVIndexOfTime(time: time))
-
     }
     
-    func getUVIndex() -> Float {
-        if self.uv_times != [] {
-            return self.uv_times[0].uv
-        }
-        else {
-            return 0.0
-        }
-    }
-    
-    func getTimeToBurn() -> String {
-        return skinType.getBurnTimeAsString(uvIndex: self.getUVIndex())
-    }
-    
+    /**
+     Set the location and update the uv information based on it
+     */
     func setLocation(cityname: String) -> Void {
         self.cityname = cityname
         self.getWeatherInfo()
     }
     
+    /**
+    Get the burn time as a string for a specific time
+     */
     func getBurnTimeInMinutes(currentTime: Float) -> Float {
         if uv_times == [] {
             return 0.0
@@ -69,53 +74,52 @@ class UVManager: ObservableObject {
         return skinType.getBurnTimeInMinutes(uvIndex: uv_times[Int(currentTime)].uv)
     }
     
-    func getColorCode(currentTime: Float) -> Color {
+    /**
+    Get the color code of a specific time
+     */
+    func getColorCodeByTime(currentTime: Float) -> Color {
         if self.uv_times != [] {
-            switch skinType.getBurnTimeInMinutes(uvIndex: uv_times[Int(currentTime)].uv) {
-            case 180...Float.greatestFiniteMagnitude:
-                return .green
-            case 120.0...180.0:
-                return .yellow
-            case 60.0...120.0:
-                return .orange
-            case 0.0...60.0:
-                return .red
-            default:
-                return .red
-            }
+            return getColorCode(minutesToBurn: skinType.getBurnTimeInMinutes(uvIndex: uv_times[Int(currentTime)].uv))
         } else {
             return .white
         }
     }
     
-    func getColorCodes() -> [Color] {
+    /**
+     Get the color codes of the whole array of uv times
+     */
+    func getAllColorCodes() -> [Color] {
+        if self.uv_times == [] {
+            return [.red]
+        }
         var result: [Color] = []
-        if self.uv_times != [] {
-            for uv in self.uv_times {
-                switch skinType.getBurnTimeInMinutes(uvIndex: uv.uv) {
-                case 160.0...Float.greatestFiniteMagnitude:
-                    result.append(.green)
-                case 120.0...160.0:
-                    result.append(.yellow)
-                case 60.0...120.0:
-                    result.append(.orange)
-                case 20.0...60.0:
-                    result.append(.red)
-                case 0.0...20.0:
-                    result.append(Color("Darkred"))
-                default:
-                    result.append(.red)
-                }
-            }
+        for uv in self.uv_times {
+            result.append(getColorCode(minutesToBurn: skinType.getBurnTimeInMinutes(uvIndex: uv.uv)))
         }
-        else {
-            result = [.red]
-        }
-        
         return result
     }
     
-    func getWeatherInfo() -> Void {
+    /**
+     Return the color codes depending on the time to burn
+     */
+    private func getColorCode(minutesToBurn: Float) -> Color {
+        switch minutesToBurn {
+        case 160...Float.greatestFiniteMagnitude:
+            return .green
+        case 120.0...160.0:
+            return .yellow
+        case 60.0...120.0:
+            return .orange
+        case 30.0...60.0:
+            return .red
+        case 0.0...30.0:
+            return Color("Darkred")
+        default:
+            return .red
+        }
+    }
+    
+    private func getWeatherInfo() -> Void {
         if (cityname == nil) {
             return
         }
@@ -134,13 +138,13 @@ class UVManager: ObservableObject {
                 
                 if response.statusCode == 200 {
                     guard let data = data else { return }
-                        DispatchQueue.main.async {
-                            do {
-                                let decodedWeatherInfo = try JSONDecoder().decode(WeatherInfoModel.self, from: data)
-                                self.uv_times = decodedWeatherInfo.forecast.forecastday[0].hour
-                                
-                            } catch let error {
-                                print("Error decoding ", error)
+                    DispatchQueue.main.async {
+                        do {
+                            let decodedWeatherInfo = try JSONDecoder().decode(WeatherInfoModel.self, from: data)
+                            self.uv_times = decodedWeatherInfo.forecast.forecastday[0].hour
+                            
+                        } catch let error {
+                            print("Error decoding ", error)
                         }
                     }
                 }
@@ -149,4 +153,3 @@ class UVManager: ObservableObject {
         }
     }
 }
-

@@ -8,6 +8,9 @@
 import Foundation
 import UserNotifications
 
+/**
+ Manages the notifications for the applications, that can be enabled by the user
+ */
 class NotificationManager {
     
     var activatedNotification: Int
@@ -18,7 +21,7 @@ class NotificationManager {
     
     init(activatedNotification: Int) {
         self.activatedNotification = activatedNotification
-        //Ask for authorization
+        //Ask for authorization to send notifications
         UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .badge, .sound]) { success, error in
             if success {
                 self.notificationsAllowed = true
@@ -29,14 +32,21 @@ class NotificationManager {
         }
     }
     
+    /**
+     Disables notifications and removes all pending ones
+     */
     func disableNotification() -> Void {
         UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
         self.activatedNotification = 0
     }
     
+    /**
+     Sets the current notifications status to a given integer
+     */
     func enableNotifications(newNotification: Int, uvManager: UVManager) -> Void {
+        //If notifications are not allowed: abort
         if !notificationsAllowed {
-            print("Enable notifications")
+            print("Enable notifications to activate")
             return
         }
         if newNotification == 0 {
@@ -47,62 +57,46 @@ class NotificationManager {
                 print("No information available")
                 return
             }
-            print("Notification enabled")
-            scheduleNotification(time: maxTime.getHour(), uvIndex: maxTime.uv)
-            scheduleMorningNotification()
+            //Schedule both notifications
+            scheduleAlertNotification(time: maxTime.getHour(), uvIndex: maxTime.uv)
+            scheduleRecurrentNotification()
             self.activatedNotification = 1
         }
     }
     
-    func scheduleMorningNotification() {
+    /**
+     Schedules a recurring notification for the user to check the app. This could be improved by background acticity or push notifications from a server to display the actual information for that day in the notification.
+     */
+    func scheduleRecurrentNotification() {
         
         if recurringNotificationEnabled == true {
             return
         }
         
-        let content = UNMutableNotificationContent()
-        content.title = "Don't get a sunburn today!"
-        content.body = "Get the latest information about the uv radiation now!"
+        let title = "Don't get a sunburn today!"
+        let body = "Get the latest information about the uv radiation now!"
         
-        var dateComponents = DateComponents()
-        dateComponents.calendar = Calendar.current
-        
-        dateComponents.hour = 9
-        
-        // Create the trigger as a repeating event.
-        let trigger = UNCalendarNotificationTrigger(
-            dateMatching: dateComponents, repeats: true)
-        
-        // Create the request
-        let uuidString = UUID().uuidString
-        
-        let request = UNNotificationRequest(identifier: uuidString,
-                                            content: content, trigger: trigger)
-        
-        // Schedule the request with the system.
-        let notificationCenter = UNUserNotificationCenter.current()
-        notificationCenter.add(request) { (error) in
-            if error != nil {
-                print("Some error")
-            }
-        }
+        scheduleNotification(title: title, body: body, hour: 9, recurring: true)
+
         self.recurringNotificationEnabled = true
     }
-
     
-    func scheduleNotification(time: Int, uvIndex: Float) {
+    /**
+     Schedule a notification using UNUserNotificationCenter
+     */
+    private func scheduleNotification(title: String, body: String, hour: Int, recurring: Bool) -> Void {
         let content = UNMutableNotificationContent()
-        content.title = "Alert"
-        content.body = "The maximum UVIndex today will be \(uvIndex) at \(time). Take care."
+        content.title = title
+        content.body = body
         
         var dateComponents = DateComponents()
         dateComponents.calendar = Calendar.current
         
-        dateComponents.hour = time - 2
+        dateComponents.hour = hour
         
         // Create the trigger as a repeating event.
         let trigger = UNCalendarNotificationTrigger(
-            dateMatching: dateComponents, repeats: false)
+            dateMatching: dateComponents, repeats: recurring)
         
         // Create the request
         let uuidString = UUID().uuidString
@@ -117,6 +111,17 @@ class NotificationManager {
                 print("Some error")
             }
         }
+    }
+    
+    /**
+     Schedule a notification using the highest uv Index at that day
+     */
+    func scheduleAlertNotification(time: Int, uvIndex: Float) {
+        
+        let title = "Alert"
+        let body = "The maximum UVIndex today will be \(uvIndex) at \(time). Take care."
+        
+        scheduleNotification(title: title, body: body, hour: time-2, recurring: false)
     }
 }
 

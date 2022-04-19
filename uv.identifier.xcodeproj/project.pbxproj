@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		2203580D27EE716E00C4C472 /* APICaller.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2203580C27EE716E00C4C472 /* APICaller.swift */; };
 		222BE95D2808529500580CFC /* NotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 222BE95C2808529500580CFC /* NotificationManager.swift */; };
 		2251CBBD27E557E10087E68C /* WeatherInfoModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2251CBBC27E557E10087E68C /* WeatherInfoModel.swift */; };
 		228C172027EF404B001D283F /* Response.json in Resources */ = {isa = PBXBuildFile; fileRef = 228C171F27EF404B001D283F /* Response.json */; };
@@ -24,7 +23,6 @@
 		22BEFE6E27E4E09500490A9A /* UVManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22BEFE6D27E4E09500490A9A /* UVManager.swift */; };
 		22BEFE7127E4E0E900490A9A /* SkinType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22BEFE7027E4E0E900490A9A /* SkinType.swift */; };
 		22E7DF5127E49747002407DC /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22E7DF5027E49747002407DC /* LocationManager.swift */; };
-		22FB8E4628045628000E12AB /* SettingsPopup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22FB8E4528045628000E12AB /* SettingsPopup.swift */; };
 		22FB8E4828045EE7000E12AB /* LanguageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22FB8E4728045EE7000E12AB /* LanguageManager.swift */; };
 /* End PBXBuildFile section */
 
@@ -46,7 +44,6 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		2203580C27EE716E00C4C472 /* APICaller.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APICaller.swift; sourceTree = "<group>"; };
 		222BE95C2808529500580CFC /* NotificationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationManager.swift; sourceTree = "<group>"; };
 		2251CBBC27E557E10087E68C /* WeatherInfoModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherInfoModel.swift; sourceTree = "<group>"; };
 		228C171F27EF404B001D283F /* Response.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = Response.json; sourceTree = "<group>"; };
@@ -67,7 +64,6 @@
 		22BEFE7027E4E0E900490A9A /* SkinType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SkinType.swift; sourceTree = "<group>"; };
 		22E7DF5027E49747002407DC /* LocationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
 		22F47EDB280DC19B00AD33EB /* uv-identifier-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "uv-identifier-Info.plist"; sourceTree = SOURCE_ROOT; };
-		22FB8E4528045628000E12AB /* SettingsPopup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsPopup.swift; sourceTree = "<group>"; };
 		22FB8E4728045EE7000E12AB /* LanguageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LanguageManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -99,7 +95,6 @@
 		228C172127EFDE64001D283F /* Components */ = {
 			isa = PBXGroup;
 			children = (
-				22FB8E4528045628000E12AB /* SettingsPopup.swift */,
 				228C172227EFDE8F001D283F /* BulletPointView.swift */,
 				228C172427EFDEFE001D283F /* QuadraticTileView.swift */,
 				228C172627EFDF11001D283F /* SliderView.swift */,
@@ -182,7 +177,6 @@
 			children = (
 				22E7DF5027E49747002407DC /* LocationManager.swift */,
 				222BE95C2808529500580CFC /* NotificationManager.swift */,
-				2203580C27EE716E00C4C472 /* APICaller.swift */,
 				22BEFE6D27E4E09500490A9A /* UVManager.swift */,
 				22FB8E4728045EE7000E12AB /* LanguageManager.swift */,
 			);
@@ -324,14 +318,12 @@
 				22BEFE6E27E4E09500490A9A /* UVManager.swift in Sources */,
 				22BEFE7127E4E0E900490A9A /* SkinType.swift in Sources */,
 				22FB8E4828045EE7000E12AB /* LanguageManager.swift in Sources */,
-				2203580D27EE716E00C4C472 /* APICaller.swift in Sources */,
 				22B5A93E27E3AF0D001AA038 /* ContentView.swift in Sources */,
 				222BE95D2808529500580CFC /* NotificationManager.swift in Sources */,
 				228C172527EFDEFE001D283F /* QuadraticTileView.swift in Sources */,
 				228C172327EFDE8F001D283F /* BulletPointView.swift in Sources */,
 				22B5A93C27E3AF0D001AA038 /* uv_identifierApp.swift in Sources */,
 				22E7DF5127E49747002407DC /* LocationManager.swift in Sources */,
-				22FB8E4628045628000E12AB /* SettingsPopup.swift in Sources */,
 				228C172727EFDF11001D283F /* SliderView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

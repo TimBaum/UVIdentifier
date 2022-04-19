@@ -11,7 +11,7 @@ import Foundation
  This class represents the skintype of a person. It is based on Fitzgerald.
  */
 class SkinType {
-    //Can range from 16
+    //Can range from 1 to 6
     var skinTypeNumber: Int
     
     init(skinType: Int) {
@@ -20,14 +20,14 @@ class SkinType {
     }
     
     /**
-    Return the time to get a sunburn
+     Return the time to get a sunburn
      */
     func getBurnTimeInMinutes(uvIndex: Float) -> Float {
         return getMultiplier() * 200.0 / (3.0 * uvIndex)
     }
     
     /**
-    Returns the time to burn in a readable string
+     Returns the time to burn in a readable string
      */
     func getBurnTimeAsString(uvIndex: Float) -> String {
         let minutes = getBurnTimeInMinutes(uvIndex: uvIndex)

@@ -7,6 +7,9 @@
 
 import Foundation
 
+/**
+ Based on the JSON that is returned from the server. 
+ */
 struct WeatherInfoModel: Codable {
     let id = UUID()
     var forecast: Forecast
@@ -21,6 +24,7 @@ struct WeatherInfoModel: Codable {
     }
 
 struct HourWeather: Codable, Equatable, Comparable {
+    //Needed to find the max
     static func < (lhs: HourWeather, rhs: HourWeather) -> Bool {
         if lhs.uv < rhs.uv {
             return true
@@ -29,6 +33,9 @@ struct HourWeather: Codable, Equatable, Comparable {
         }
     }
     
+    /**
+     Get the hour from a given date String
+     */
     func getHour() -> Int {
         var res = self.time.split(separator: " ")[1]
         res = res.split(separator: ":")[0]

@@ -10,7 +10,7 @@ import SwiftUI
 struct ContentView: View {
     
     @StateObject var locationManager = LocationManager()
-    @ObservedObject var uvManager = UVManager(skinType: 1, cityname: "Granada")
+    @ObservedObject var uvManager = UVManager(skinType: 1)
     let languageManager = LanguageManagager()
     
     //@State var currentLanguage = "🇺🇸"
@@ -24,9 +24,11 @@ struct ContentView: View {
     let skinTypes = ["👋🏻 - Skin Type 1", "👋🏻 - Skin Type 2", "👋🏼 - Skin Type 3", "👋🏽 - Skin Type 4", "👋🏾 - Skin Type 5", "👋🏿 - Skin Type 6"]
     
     init() {
+        //Current time
         let date = Date()
         let calendar = Calendar.current
         currentTime = Float(calendar.component(.hour, from: date))
+        //Set skin type based on last status or skintype 1
         uvManager.setSkinType(newSkinType: skinTypes.firstIndex(of: UserDefaults.standard.string(forKey: "currentSkinType") ?? "👋🏻 - Skin Type 1")! + 1)
     }
     
@@ -55,9 +57,9 @@ struct ContentView: View {
                 DividerWhite()
                 
                 HStack {
-                    QuadraticTileView(title: "Time to sunburn", content: uvManager.getTimeToBurnOfTime(time: Int(currentTime)), color: uvManager.getColorCode(currentTime: currentTime))
+                    QuadraticTileView(title: "Time to sunburn", content: uvManager.getTimeToBurnOfTime(time: Int(currentTime)), color: uvManager.getColorCodeByTime(currentTime: currentTime))
 
-                    QuadraticTileView(title: "UV-Index", content: NSString(format: "%.0f", uvManager.getUVIndexOfTime(time: Int(currentTime))) as String, color: uvManager.getColorCode(currentTime: currentTime))
+                    QuadraticTileView(title: "UV-Index", content: NSString(format: "%.0f", uvManager.getUVIndexOfTime(time: Int(currentTime))) as String, color: uvManager.getColorCodeByTime(currentTime: currentTime))
                 }
                 
                 BulletPointView(currentTime: currentTime, burnMinutes: uvManager.getBurnTimeInMinutes(currentTime: currentTime))
@@ -82,15 +84,19 @@ struct ContentView: View {
             locationManager.checkIfLocationServicesIsEnabled()
         }
         .onChange(of: currentSkinType) { value in
+            //Update skin type on change
             uvManager.setSkinType(newSkinType: skinTypes.firstIndex(of: value)! + 1)
         }
         .onChange(of: locationManager.city) { value in
+            //Update location on change of the city
             uvManager.setLocation(cityname: value!)
         }
         .onChange(of: currentNotification) { value in
+            //Update notification settings on change of prefered notification
             notificationManager.enableNotifications(newNotification: notificationManager.notificationDescriptions.firstIndex(of: value)!, uvManager: uvManager)
         }
         .onChange(of: uvManager.uv_times) {_ in
+            //Update notifications when the available information about the uv index changes
             notificationManager.enableNotifications(newNotification: notificationManager.notificationDescriptions.firstIndex(of: currentNotification)!, uvManager: uvManager)
         }
     }
@@ -102,6 +108,9 @@ struct ContentView_Previews: PreviewProvider {
     }
 }
 
+/**
+ Divider style
+ */
 struct DividerWhite: View {
     var body: some View {
         Divider()
@@ -112,6 +121,9 @@ struct DividerWhite: View {
     }
 }
 
+/**
+ Settings tile
+ */
 struct settingsTile: View {
     let icon: String
     let options: [String]

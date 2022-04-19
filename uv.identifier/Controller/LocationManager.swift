@@ -6,7 +6,9 @@
 //
 
 import MapKit
-
+/**
+ Manages the location of the user
+ */
 final class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
     
     var locationManager: CLLocationManager?
@@ -14,6 +16,9 @@ final class LocationManager: NSObject, ObservableObject, CLLocationManagerDelega
     @Published var city: String?
     @Published var country: String?
     
+    /**
+    Check if location services are enabled
+     */
     func checkIfLocationServicesIsEnabled() {
         if CLLocationManager.locationServicesEnabled() {
             locationManager = CLLocationManager()
@@ -24,6 +29,9 @@ final class LocationManager: NSObject, ObservableObject, CLLocationManagerDelega
         }
     }
     
+    /**
+     Ask for permission or if permission is granted update city and country based on the location
+     */
     private func checkLocationAuthorization() {
         guard let locationManager = locationManager else {
             return
@@ -53,6 +61,9 @@ final class LocationManager: NSObject, ObservableObject, CLLocationManagerDelega
         checkLocationAuthorization()
     }
     
+    /**
+     update the city and country using CLGeocoder
+     */
     func updateCityAndCountry() {
         let geoCoder = CLGeocoder()
         let location = CLLocation(latitude: region!.center.latitude, longitude: region!.center.longitude)

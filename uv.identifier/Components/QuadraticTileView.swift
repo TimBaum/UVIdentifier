@@ -7,6 +7,9 @@
 
 import SwiftUI
 
+/**
+ Quadratic tile, that displays information
+ */
 struct QuadraticTileView: View {
     
     let title: String
