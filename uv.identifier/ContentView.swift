@@ -45,9 +45,11 @@ struct ContentView: View {
                         Text("📍 " + (locationManager.city ?? "-") + ",")
                             .font(.title)
                             .fontWeight(.bold)
+                            .foregroundColor(.black)
                         Text(locationManager.country ?? "-")
                             .font(.title)
                             .fontWeight(.bold)
+                            .foregroundColor(.black)
                     }
                     .padding()
                     .background(RoundedRectangle(
@@ -138,13 +140,20 @@ struct settingsTile: View {
     var body: some View {
         
         VStack{
-            Picker(icon, selection: $selection){
-                ForEach(options, id: \.self) {
-                    Text($0)
+            Menu {
+                Picker(icon, selection: $selection){
+                    ForEach(options, id: \.self) {
+                        Text($0)
+                    }
                 }
+                .labelsHidden()
+                .pickerStyle(InlinePickerStyle())
+            } label: {
+                Text(selection)
+                    .foregroundColor(.black)
+                    .font(.body)
+                    .padding()
             }
-            .pickerStyle(.menu)
-            .padding()
             .background(RoundedRectangle(
                 cornerRadius: 10
             )
