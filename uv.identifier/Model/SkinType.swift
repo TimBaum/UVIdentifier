@@ -30,6 +30,9 @@ class SkinType {
      Returns the time to burn in a readable string
      */
     func getBurnTimeAsString(uvIndex: Float) -> String {
+        if uvIndex == 1.0 {
+            return "∞"
+        }
         let minutes = getBurnTimeInMinutes(uvIndex: uvIndex)
         if minutes > 60 {
             let hours = minutes/60

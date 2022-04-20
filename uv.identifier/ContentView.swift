@@ -36,47 +36,52 @@ struct ContentView: View {
         ZStack {
             LinearGradient(gradient: Gradient(colors: [Color("Blue2"), Color("Blue1")]), startPoint: .topLeading, endPoint: .bottomTrailing)
                 .ignoresSafeArea()
-
-            VStack {
+            
+            
+            ScrollView{
+                
                 VStack {
-                    Text("📍 " + (locationManager.city ?? "-") + ",")
-                        .font(.title)
-                        .fontWeight(.bold)
-                    Text(locationManager.country ?? "-")
-                        .font(.title)
-                        .fontWeight(.bold)
+                    VStack {
+                        Text("📍 " + (locationManager.city ?? "-") + ",")
+                            .font(.title)
+                            .fontWeight(.bold)
+                        Text(locationManager.country ?? "-")
+                            .font(.title)
+                            .fontWeight(.bold)
+                    }
+                    .padding()
+                    .background(RoundedRectangle(
+                        cornerRadius: 10
+                    )
+                        .fill(Color("LightBackground"))
+                        .shadow(radius: 5))
+                    .padding(.top)
+                    
+                    
+                    
+                    DividerWhite()
+                    
+                    HStack {
+                        QuadraticTileView(title: "Time to sunburn", content: uvManager.getTimeToBurnOfTime(time: Int(currentTime)), color: uvManager.getColorCodeByTime(currentTime: currentTime))
+                        
+                        QuadraticTileView(title: "UV-Index", content: NSString(format: "%.0f", uvManager.getUVIndexOfTime(time: Int(currentTime))) as String, color: uvManager.getColorCodeByTime(currentTime: currentTime))
+                    }
+                    
+                    BulletPointView(currentTime: currentTime, burnMinutes: uvManager.getBurnTimeInMinutes(currentTime: currentTime))
+                    SliderView(uvManager: uvManager, currentTime: $currentTime)
+                    
+                    DividerWhite()
+                    
+                    Spacer()
+                    
+                    HStack {
+                        //                    settingsTile(icon: "🇺🇸", options: languageManager.languages, selection: $currentLanguage)
+                        //                    Spacer()
+                        settingsTile(icon: "👋", options: skinTypes, selection: $currentSkinType)
+                        settingsTile(icon: "🛎", options: notificationManager.notificationDescriptions, selection: $currentNotification)
+                    }
+                    .padding(.horizontal)
                 }
-                .padding()
-                .background(RoundedRectangle(
-                    cornerRadius: 10
-                )
-                .fill(Color("LightBackground"))
-                .shadow(radius: 5))
-                .padding(.top)
-
-                DividerWhite()
-                
-                HStack {
-                    QuadraticTileView(title: "Time to sunburn", content: uvManager.getTimeToBurnOfTime(time: Int(currentTime)), color: uvManager.getColorCodeByTime(currentTime: currentTime))
-
-                    QuadraticTileView(title: "UV-Index", content: NSString(format: "%.0f", uvManager.getUVIndexOfTime(time: Int(currentTime))) as String, color: uvManager.getColorCodeByTime(currentTime: currentTime))
-                }
-                
-                BulletPointView(currentTime: currentTime, burnMinutes: uvManager.getBurnTimeInMinutes(currentTime: currentTime))
-                SliderView(uvManager: uvManager, currentTime: $currentTime)
-                                
-                DividerWhite()
-                
-                Spacer()
-                
-                HStack {
-//                    settingsTile(icon: "🇺🇸", options: languageManager.languages, selection: $currentLanguage)
-//                    Spacer()
-                    settingsTile(icon: "👋", options: skinTypes, selection: $currentSkinType)
-                    settingsTile(icon: "🛎", options: notificationManager.notificationDescriptions, selection: $currentNotification)
-                }
-                .padding(.leading)
-                .padding(.trailing)
             }
         }
         .onAppear {
@@ -114,10 +119,10 @@ struct ContentView_Previews: PreviewProvider {
 struct DividerWhite: View {
     var body: some View {
         Divider()
-        .opacity(0)
-        .frame(height: 1.0)
-        .background(Color("LightBackground"))
-        .padding()
+            .opacity(0)
+            .frame(height: 1.0)
+            .background(Color("LightBackground"))
+            .padding()
     }
 }
 
@@ -131,7 +136,7 @@ struct settingsTile: View {
     @Binding var selection: String
     
     var body: some View {
-    
+        
         VStack{
             Picker(icon, selection: $selection){
                 ForEach(options, id: \.self) {
@@ -142,10 +147,10 @@ struct settingsTile: View {
             .padding()
             .background(RoundedRectangle(
                 cornerRadius: 10
-                )
-            .fill(Color("LightBackground"))
-            .shadow(radius: 5)
-)
+            )
+                .fill(Color("LightBackground"))
+                .shadow(radius: 5)
+            )
         }
     }
 }

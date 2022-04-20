@@ -52,7 +52,7 @@ struct QuadraticTileView: View {
             .aspectRatio(1.0, contentMode: .fit)
             .shadow(radius: 5)
         )
-        .padding()
+        .padding(.horizontal)
     }
 }
 

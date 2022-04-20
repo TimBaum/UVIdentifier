@@ -91,7 +91,7 @@ struct SliderView: View {
         )
             .fill(Color("DarkBackground"))
             .shadow(radius: 5))
-        .padding()
+        .padding(.horizontal)
         
     }
 }
