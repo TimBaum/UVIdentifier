@@ -12,8 +12,7 @@ import SwiftUI
  */
 struct BulletPointView: View {
     
-    var currentTime: Float
-    var burnMinutes: Float
+    var burnMinutes: Float //can be freed by directly setting the text in init
     
     let highUV = ["Stay inside", "Seek shadow", "Use sun lotion"]
     let mediumUV = ["Cover your skin", "Wear sunglasses", "Use sun lotion"]

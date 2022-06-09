@@ -53,7 +53,7 @@ class NotificationManager {
             disableNotification()
         }
         else if newNotification == 1 {
-            guard let maxTime = uvManager.uv_times.max() else {
+            guard let maxTime = uvManager.uvTimes.max() else {
                 print("No information available")
                 return
             }
@@ -67,7 +67,7 @@ class NotificationManager {
     /**
      Schedules a recurring notification for the user to check the app. This could be improved by background acticity or push notifications from a server to display the actual information for that day in the notification.
      */
-    func scheduleRecurrentNotification() {
+    private func scheduleRecurrentNotification() {
         
         if recurringNotificationEnabled == true {
             return

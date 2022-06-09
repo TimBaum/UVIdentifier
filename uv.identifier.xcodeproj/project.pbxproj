@@ -13,6 +13,7 @@
 		228C172327EFDE8F001D283F /* BulletPointView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 228C172227EFDE8F001D283F /* BulletPointView.swift */; };
 		228C172527EFDEFE001D283F /* QuadraticTileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 228C172427EFDEFE001D283F /* QuadraticTileView.swift */; };
 		228C172727EFDF11001D283F /* SliderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 228C172627EFDF11001D283F /* SliderView.swift */; };
+		22AA69BD284D13CA0004928E /* SettingsTile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22AA69BC284D13CA0004928E /* SettingsTile.swift */; };
 		22B5A93C27E3AF0D001AA038 /* uv_identifierApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22B5A93B27E3AF0D001AA038 /* uv_identifierApp.swift */; };
 		22B5A93E27E3AF0D001AA038 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22B5A93D27E3AF0D001AA038 /* ContentView.swift */; };
 		22B5A94027E3AF10001AA038 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 22B5A93F27E3AF10001AA038 /* Assets.xcassets */; };
@@ -50,6 +51,7 @@
 		228C172227EFDE8F001D283F /* BulletPointView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BulletPointView.swift; sourceTree = "<group>"; };
 		228C172427EFDEFE001D283F /* QuadraticTileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuadraticTileView.swift; sourceTree = "<group>"; };
 		228C172627EFDF11001D283F /* SliderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SliderView.swift; sourceTree = "<group>"; };
+		22AA69BC284D13CA0004928E /* SettingsTile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsTile.swift; sourceTree = "<group>"; };
 		22B5A93827E3AF0D001AA038 /* uv.identifier.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = uv.identifier.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		22B5A93B27E3AF0D001AA038 /* uv_identifierApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = uv_identifierApp.swift; sourceTree = "<group>"; };
 		22B5A93D27E3AF0D001AA038 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -98,6 +100,7 @@
 				228C172227EFDE8F001D283F /* BulletPointView.swift */,
 				228C172427EFDEFE001D283F /* QuadraticTileView.swift */,
 				228C172627EFDF11001D283F /* SliderView.swift */,
+				22AA69BC284D13CA0004928E /* SettingsTile.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -322,6 +325,7 @@
 				222BE95D2808529500580CFC /* NotificationManager.swift in Sources */,
 				228C172527EFDEFE001D283F /* QuadraticTileView.swift in Sources */,
 				228C172327EFDE8F001D283F /* BulletPointView.swift in Sources */,
+				22AA69BD284D13CA0004928E /* SettingsTile.swift in Sources */,
 				22B5A93C27E3AF0D001AA038 /* uv_identifierApp.swift in Sources */,
 				22E7DF5127E49747002407DC /* LocationManager.swift in Sources */,
 				228C172727EFDF11001D283F /* SliderView.swift in Sources */,

@@ -8,14 +8,11 @@
 import SwiftUI
 
 /**
- Represents the slider. Slider does only display the UV intensity over the day and doesnt actually implement any functionality
+ Represents the slider. Slider does only display the UV intensity over the day and doesnt actually implement any functionality yet
  */
 struct SliderView: View {
     
     @ObservedObject var uvManager: UVManager
-    
-    @State private var speed = 50.0
-    @State private var isEditing = false
     
     @Binding var currentTime: Float
     
@@ -97,7 +94,7 @@ struct SliderView: View {
 }
 
 /**
- Customisable slider 
+ Customisable slider, the slider is supposed to update the time and I probably tried for 5-6 hours and I haven't found a way to accomplish it. Im not sure if its possible to mix the frameworks UIKit and SwiftUI like this.
  */
 struct UISliderView: UIViewRepresentable {
     

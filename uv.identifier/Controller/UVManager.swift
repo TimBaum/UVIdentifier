@@ -18,7 +18,7 @@ class UVManager: ObservableObject {
     var skinType: SkinType
     var cityname: String? = nil
     @Published var colorCodes: [Color] = []
-    @Published var uv_times: [HourWeather] = [] {
+    @Published var uvTimes: [HourWeather] = [] {
         didSet {
             self.colorCodes = getAllColorCodes()
         }
@@ -41,8 +41,8 @@ class UVManager: ObservableObject {
      Return the uv index of a certain time or 0 if its empty
      */
     func getUVIndexOfTime(time: Int) -> Float {
-        if self.uv_times != [] {
-            return self.uv_times[time].uv
+        if self.uvTimes != [] {
+            return self.uvTimes[time].uv
         }
         else {
             return 0.0
@@ -68,18 +68,18 @@ class UVManager: ObservableObject {
     Get the burn time as a string for a specific time
      */
     func getBurnTimeInMinutes(currentTime: Float) -> Float {
-        if uv_times == [] {
+        if uvTimes == [] {
             return 0.0
         }
-        return skinType.getBurnTimeInMinutes(uvIndex: uv_times[Int(currentTime)].uv)
+        return skinType.getBurnTimeInMinutes(uvIndex: uvTimes[Int(currentTime)].uv)
     }
     
     /**
     Get the color code of a specific time
      */
     func getColorCodeByTime(currentTime: Float) -> Color {
-        if self.uv_times != [] {
-            return getColorCode(minutesToBurn: skinType.getBurnTimeInMinutes(uvIndex: uv_times[Int(currentTime)].uv))
+        if self.uvTimes != [] {
+            return getColorCode(minutesToBurn: skinType.getBurnTimeInMinutes(uvIndex: uvTimes[Int(currentTime)].uv))
         } else {
             return .white
         }
@@ -89,11 +89,11 @@ class UVManager: ObservableObject {
      Get the color codes of the whole array of uv times
      */
     func getAllColorCodes() -> [Color] {
-        if self.uv_times == [] {
+        if self.uvTimes == [] {
             return [.red]
         }
         var result: [Color] = []
-        for uv in self.uv_times {
+        for uv in self.uvTimes {
             result.append(getColorCode(minutesToBurn: skinType.getBurnTimeInMinutes(uvIndex: uv.uv)))
         }
         return result
@@ -119,6 +119,9 @@ class UVManager: ObservableObject {
         }
     }
     
+    /**
+    Call UV Information from the API
+     */
     private func getWeatherInfo() -> Void {
         if (cityname == nil) {
             return
@@ -141,8 +144,7 @@ class UVManager: ObservableObject {
                     DispatchQueue.main.async {
                         do {
                             let decodedWeatherInfo = try JSONDecoder().decode(WeatherInfoModel.self, from: data)
-                            self.uv_times = decodedWeatherInfo.forecast.forecastday[0].hour
-                            
+                            self.uvTimes = decodedWeatherInfo.forecast.forecastday[0].hour                            
                         } catch let error {
                             print("Error decoding ", error)
                         }

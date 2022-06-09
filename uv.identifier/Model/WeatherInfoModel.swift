@@ -24,6 +24,10 @@ struct WeatherInfoModel: Codable {
     }
 
 struct HourWeather: Codable, Equatable, Comparable {
+    
+    var time: String
+    var uv: Float
+    
     //Needed to find the max
     static func < (lhs: HourWeather, rhs: HourWeather) -> Bool {
         if lhs.uv < rhs.uv {
@@ -41,7 +45,4 @@ struct HourWeather: Codable, Equatable, Comparable {
         res = res.split(separator: ":")[0]
         return Int(res) ?? 0
     }
-    
-    var time: String
-    var uv: Float
 }

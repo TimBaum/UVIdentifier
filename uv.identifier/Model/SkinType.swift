@@ -46,7 +46,7 @@ class SkinType {
     /**
      Return the multiplier for each skintype
      */
-    private func getMultiplier() -> Float{
+    private func getMultiplier() -> Float {
         switch skinTypeNumber {
         case 1:
             return 2.5

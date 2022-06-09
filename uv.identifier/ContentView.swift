@@ -9,7 +9,7 @@ import SwiftUI
 
 struct ContentView: View {
     
-    @StateObject var locationManager = LocationManager()
+    @ObservedObject var locationManager = LocationManager()
     @ObservedObject var uvManager = UVManager(skinType: 1)
     let languageManager = LanguageManagager()
     
@@ -69,7 +69,7 @@ struct ContentView: View {
                         QuadraticTileView(title: "UV-Index", content: NSString(format: "%.0f", uvManager.getUVIndexOfTime(time: Int(currentTime))) as String, color: uvManager.getColorCodeByTime(currentTime: currentTime))
                     }
                     
-                    BulletPointView(currentTime: currentTime, burnMinutes: uvManager.getBurnTimeInMinutes(currentTime: currentTime))
+                    BulletPointView(burnMinutes: uvManager.getBurnTimeInMinutes(currentTime: currentTime))
                     SliderView(uvManager: uvManager, currentTime: $currentTime)
                     
                     DividerWhite()
@@ -77,8 +77,8 @@ struct ContentView: View {
                     Spacer()
                     
                     HStack {
-                        //                    settingsTile(icon: "🇺🇸", options: languageManager.languages, selection: $currentLanguage)
-                        //                    Spacer()
+                        //  settingsTile(icon: "🇺🇸", options: languageManager.languages, selection: $currentLanguage)
+                        //  Spacer()
                         settingsTile(icon: "👋", options: skinTypes, selection: $currentSkinType)
                         settingsTile(icon: "🛎", options: notificationManager.notificationDescriptions, selection: $currentNotification)
                     }
@@ -102,7 +102,7 @@ struct ContentView: View {
             //Update notification settings on change of prefered notification
             notificationManager.enableNotifications(newNotification: notificationManager.notificationDescriptions.firstIndex(of: value)!, uvManager: uvManager)
         }
-        .onChange(of: uvManager.uv_times) {_ in
+        .onChange(of: uvManager.uvTimes) {_ in
             //Update notifications when the available information about the uv index changes
             notificationManager.enableNotifications(newNotification: notificationManager.notificationDescriptions.firstIndex(of: currentNotification)!, uvManager: uvManager)
         }
@@ -116,7 +116,7 @@ struct ContentView_Previews: PreviewProvider {
 }
 
 /**
- Divider style
+ Divider styling
  */
 struct DividerWhite: View {
     var body: some View {
@@ -125,41 +125,5 @@ struct DividerWhite: View {
             .frame(height: 1.0)
             .background(Color("LightBackground"))
             .padding()
-    }
-}
-
-/**
- Settings tile
- */
-struct settingsTile: View {
-    let icon: String
-    let options: [String]
-    
-    @Binding var selection: String
-    
-    var body: some View {
-        
-        VStack{
-            Menu {
-                Picker(icon, selection: $selection){
-                    ForEach(options, id: \.self) {
-                        Text($0)
-                    }
-                }
-                .labelsHidden()
-                .pickerStyle(InlinePickerStyle())
-            } label: {
-                Text(selection)
-                    .foregroundColor(.black)
-                    .font(.body)
-                    .padding()
-            }
-            .background(RoundedRectangle(
-                cornerRadius: 10
-            )
-                .fill(Color("LightBackground"))
-                .shadow(radius: 5)
-            )
-        }
     }
 }
